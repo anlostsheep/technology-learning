@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lostsheep.technology.learning.mybatis.mapper.AddressMapper">
+    <select id="selectById" resultType="Address">
+        select * from address where id = #{id}
+    </select>
+
+    <select id="selectAddressName" resultType="string">
+        select province from address where id = #{id}
+    </select>
+</mapper>
