@@ -18,12 +18,12 @@ public class ThreadInterrupt {
     public static void main(String[] args) throws InterruptedException {
         Thread threadOne = new ThreadOne();
         threadOne.start();
-        
+
         Thread.sleep(200);
         threadOne.interrupt();
-        
+
         threadOne.join();
-        
+
         log.info("main end");
     }
 }
@@ -40,7 +40,7 @@ class ThreadOne extends Thread {
         } catch (InterruptedException e) {
             log.error("interrupt exception", e);
         }
-        
+
         threadTwo.interrupt();
     }
 }
@@ -51,7 +51,7 @@ class ThreadTwo extends Thread {
     public void run() {
         int n = 0;
         while (!isInterrupted()) {
-            n ++;
+            n++;
             log.info("thread two check {} time", n);
 
             try {

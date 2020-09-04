@@ -10,24 +10,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>technology-learning-java8-datetime</artifactId>
+    <artifactId>technology-learning-hutool</artifactId>
 
-    
+
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.4.1</version>
         </dependency>
     </dependencies>
-
 </project>

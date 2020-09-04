@@ -9,7 +9,9 @@
         <module>../technology-learning-mybatis</module>
         <module>../technoloty-learning-synchronized</module>
         <module>../technology-learning-multiple-thread</module>
-        <module>../technology-learning-java8-datetime</module>
+        <module>../technology-learning-java8</module>
+        <module>../technology-learning-hutool</module>
+        <module>../technology-learning-http-client</module>
     </modules>
 
     <parent>
