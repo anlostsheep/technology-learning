@@ -12,6 +12,7 @@
         <module>../technology-learning-java8</module>
         <module>../technology-learning-hutool</module>
         <module>../technology-learning-http-client</module>
+        <module>../technology-learning-socket</module>
     </modules>
 
     <parent>
