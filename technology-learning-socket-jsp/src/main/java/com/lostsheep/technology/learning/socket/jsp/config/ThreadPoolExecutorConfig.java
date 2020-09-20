@@ -1,33 +1,31 @@
-package com.lostsheep.technology.learning.async.upload.config;
+package com.lostsheep.technology.learning.socket.jsp.config;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * <b><code>AsyncConfig</code></b>
+ * <b><code>ThreadPoolExecutorConfig</code></b>
  * <p/>
  * Description
  * <p/>
- * <b>Creation Time:</b> 2020/7/31 23:18.
+ * <b>Creation Time:</b> 2020/9/20 05:24.
  *
  * @author dengzhen
- * @since technology-learning 1.0.0
+ * @since technology-learning-multiple-thread 1.0.0
  */
 @Slf4j
 @Configuration
-@EnableAsync
-public class AsyncConfig implements AsyncConfigurer {
+public class ThreadPoolExecutorConfig {
 
-    @Bean("asyncExecutor")
-    public ThreadPoolTaskExecutor buildExecutor() {
+    @Bean("taskExecutor")
+    public Executor executor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
         ThreadFactory threadFactory = new ThreadFactoryBuilder()
@@ -39,19 +37,12 @@ public class AsyncConfig implements AsyncConfigurer {
                 })
                 .build();
 
-        // 设置线程工厂
         executor.setThreadFactory(threadFactory);
-        // 核心线程数大小（CPU 个数乘以 2 + 1）
         executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
-        // 最大线程数大小（CPU 个数乘以 10）
         executor.setMaxPoolSize(2 * Runtime.getRuntime().availableProcessors() + 1);
-        // 设置线程池中的队列大小
         executor.setQueueCapacity(3 * Runtime.getRuntime().availableProcessors());
-        // 设置线程池中线程存活时间/s
         executor.setKeepAliveSeconds(60);
-        // 设置线程池队列满时的拒绝策略: CallerRunsPolicy() 不进入线程池中的线程处理,由调用此方法的线程处理
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        // 初始化线程池
         executor.initialize();
 
         return executor;

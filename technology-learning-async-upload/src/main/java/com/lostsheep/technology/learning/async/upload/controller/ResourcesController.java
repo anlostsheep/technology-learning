@@ -1,16 +1,19 @@
 package com.lostsheep.technology.learning.async.upload.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.lostsheep.technology.learning.async.upload.domain.BaseRequest;
+import com.lostsheep.technology.learning.async.upload.domain.BaseResponse;
 import com.lostsheep.technology.learning.async.upload.domain.FileInfo;
 import com.lostsheep.technology.learning.async.upload.service.AsyncUploadService;
+import com.lostsheep.technology.learning.async.upload.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.system.ApplicationHome;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -21,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 /**
  * <b><code>ResourcesController</code></b>
@@ -38,9 +42,59 @@ import java.util.UUID;
 public class ResourcesController {
 
     private final AsyncUploadService asyncUploadService;
+    private final BaseService<BaseRequest, BaseResponse> baseService;
 
-    public ResourcesController(AsyncUploadService asyncUploadService) {
+    public ResourcesController(AsyncUploadService asyncUploadService,
+                               BaseService<BaseRequest, BaseResponse> baseService) {
         this.asyncUploadService = asyncUploadService;
+        this.baseService = baseService;
+    }
+
+    @GetMapping("/call")
+    public Callable<ResponseEntity<String>> uploadFile1() {
+
+        return () -> {
+            log.info("callable request");
+
+            return ResponseEntity.ok("request success");
+        };
+
+    }
+
+    @GetMapping("/deferred")
+    public DeferredResult<BaseResponse> uploadFile() {
+        BaseRequest request = BaseRequest.builder()
+                .requestTime(LocalDateTime.now())
+                .requestBody("request1")
+                .build();
+        baseService.processService(request, r -> {
+            log.info("consumer method run...");
+            log.info(JSON.toJSONString(r));
+        });
+
+        return baseService.processService(() -> {
+            log.info("supplier method run...");
+            return BaseResponse.builder()
+                    .responseTime(LocalDateTime.now())
+                    .message("request success").build();
+        });
+    }
+
+    @GetMapping("/function")
+    public DeferredResult<BaseResponse> upload() {
+        BaseRequest request = BaseRequest.builder()
+                .requestTime(LocalDateTime.now())
+                .requestBody("request function")
+                .build();
+
+        return baseService.processService(request, r -> {
+            log.info(JSON.toJSONString(request));
+
+            return BaseResponse.builder()
+                    .responseTime(LocalDateTime.now())
+                    .message("function response")
+                    .build();
+        });
     }
 
     @PostMapping({"", "/"})
@@ -142,7 +196,7 @@ public class ResourcesController {
                     fileInfo.setResult(fileInfoBuilder.toString());
                     fileInfos.add(fileInfo);
                 });
-        
+
         return fileInfos;
     }
 

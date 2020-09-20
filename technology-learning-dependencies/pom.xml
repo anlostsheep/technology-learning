@@ -13,6 +13,7 @@
         <module>../technology-learning-hutool</module>
         <module>../technology-learning-http-client</module>
         <module>../technology-learning-socket</module>
+        <module>../technology-learning-socket-jsp</module>
     </modules>
 
     <parent>
