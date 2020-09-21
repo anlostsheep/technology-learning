@@ -76,16 +76,17 @@ public class BaseServiceImpl implements BaseService<BaseRequest, BaseResponse> {
     }
 
     private BaseResponse buildError() {
-        return BaseResponse.builder()
-                .message("request process error")
-                .responseTime(LocalDateTime.now())
-                .build();
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setMessage("request process error");
+        baseResponse.setResponseTime(LocalDateTime.now());
+        return baseResponse;
+                
     }
 
     private BaseResponse buildTimeout() {
-        return BaseResponse.builder()
-                .responseTime(LocalDateTime.now())
-                .message("request time out")
-                .build();
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setMessage("request time out");
+        baseResponse.setResponseTime(LocalDateTime.now());
+        return baseResponse;
     }
 }

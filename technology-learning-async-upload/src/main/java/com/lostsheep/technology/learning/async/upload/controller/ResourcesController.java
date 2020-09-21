@@ -1,10 +1,10 @@
 package com.lostsheep.technology.learning.async.upload.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.lostsheep.technology.learning.async.upload.domain.BaseRequest;
 import com.lostsheep.technology.learning.async.upload.domain.BaseResponse;
 import com.lostsheep.technology.learning.async.upload.domain.FileInfo;
+import com.lostsheep.technology.learning.async.upload.domain.FileUploadInfo;
 import com.lostsheep.technology.learning.async.upload.service.AsyncUploadService;
 import com.lostsheep.technology.learning.async.upload.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
@@ -61,39 +58,25 @@ public class ResourcesController {
 
     }
 
-    @GetMapping("/deferred")
-    public DeferredResult<BaseResponse> uploadFile() {
-        BaseRequest request = BaseRequest.builder()
-                .requestTime(LocalDateTime.now())
-                .requestBody("request1")
-                .build();
-        baseService.processService(request, r -> {
-            log.info("consumer method run...");
-            log.info(JSON.toJSONString(r));
-        });
+    @PostMapping("/files")
+    public DeferredResult<BaseResponse> uploadResources(@RequestParam("files") MultipartFile[] files) {
 
         return baseService.processService(() -> {
-            log.info("supplier method run...");
-            return BaseResponse.builder()
-                    .responseTime(LocalDateTime.now())
-                    .message("request success").build();
-        });
-    }
+            String projectPath = this.getProjectPath();
+            log.debug("项目目录:{}", projectPath);
 
-    @GetMapping("/function")
-    public DeferredResult<BaseResponse> upload() {
-        BaseRequest request = BaseRequest.builder()
-                .requestTime(LocalDateTime.now())
-                .requestBody("request function")
-                .build();
+            String directoryPath = this.mkdir(projectPath);
+            log.debug("项目存储目录创建成功");
 
-        return baseService.processService(request, r -> {
-            log.info(JSON.toJSONString(request));
+            List<FileInfo> fileInfos = this.saveFiles(files, directoryPath);
 
-            return BaseResponse.builder()
-                    .responseTime(LocalDateTime.now())
-                    .message("function response")
+            FileUploadInfo fileUploadInfo = FileUploadInfo.builder()
+                    .fileInfos(fileInfos)
                     .build();
+            fileUploadInfo.setMessage("文件上传成功!");
+            fileUploadInfo.setResponseTime(LocalDateTime.now());
+
+            return fileUploadInfo;
         });
     }
 
@@ -108,7 +91,7 @@ public class ResourcesController {
         log.info("resourcesPath:{}", resourcesPath);
 
         // 存储临时文件
-        List<FileInfo> fileInfos = saveFiles(files, resourcesPath);
+        List<FileInfo> fileInfos = this.saveFiles(files, resourcesPath);
 
         // 异步处理数据
         asyncUploadService.asyncUploadResources(millisecondTime());
@@ -144,7 +127,11 @@ public class ResourcesController {
     }
 
     private List<FileInfo> saveFiles(MultipartFile[] multipartFiles, String resourcesPath) {
+        log.debug(multipartFiles == null ? "异步线程丢失文件" : "文件读取正常");
+
         List<FileInfo> fileInfos = Lists.newArrayList();
+
+        Assert.isTrue(Objects.nonNull(multipartFiles), "文件集合不能为空!");
         Arrays.stream(multipartFiles)
                 .forEach(file -> {
                     StringBuilder fileInfoBuilder = new StringBuilder();
@@ -165,6 +152,16 @@ public class ResourcesController {
                     fileInfo.setStoreName(optFileName);
 
                     File singleFile = new File(resourcesPath + File.separator + optFileName);
+
+                    Optional.of(singleFile)
+                            .filter(File::exists)
+                            .ifPresent(f -> {
+                                fileInfo.setSuccessOrNot(1);
+                                fileInfoBuilder.append("文件[")
+                                        .append(optFileName)
+                                        .append("]已存在, 请勿重复上传;");
+                            });
+                    
                     Optional.of(singleFile)
                             .filter(f -> !f.exists())
                             .ifPresent(f -> {
@@ -182,15 +179,6 @@ public class ResourcesController {
                                             .append("]存储失败;");
 
                                 }
-                            });
-
-                    Optional.of(singleFile)
-                            .filter(File::exists)
-                            .ifPresent(f -> {
-                                fileInfo.setSuccessOrNot(1);
-                                fileInfoBuilder.append("文件[")
-                                        .append(optFileName)
-                                        .append("]已存在, 请勿重复上传;");
                             });
 
                     fileInfo.setResult(fileInfoBuilder.toString());

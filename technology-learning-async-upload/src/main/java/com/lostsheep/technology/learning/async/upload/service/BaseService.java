@@ -18,10 +18,29 @@ import java.util.function.Supplier;
  */
 public interface BaseService<T, R> {
 
+    /**
+     * 处理有参数有返回值的业务
+     *
+     * @param t        参数
+     * @param function 业务方法
+     * @return 返回值
+     */
     DeferredResult<R> processService(T t, Function<T, R> function);
 
+    /**
+     * 处理无参数有返回值的业务
+     *
+     * @param supplier 业务方法
+     * @return 返回值
+     */
     DeferredResult<R> processService(Supplier<R> supplier);
 
+    /**
+     * 处理有参数无返回值的业务
+     *
+     * @param t        参数
+     * @param consumer 业务方法
+     */
     void processService(T t, Consumer<T> consumer);
 
 }

@@ -1,6 +1,6 @@
 server:
   port: 8080
-  
+
 
 spring:
   servlet:
@@ -12,3 +12,6 @@ spring:
       max-request-size: 1024MB
   jackson:
     default-property-inclusion: non_null
+logging:
+  level:
+    com.lostsheep.technology.learning.async.upload: debug
