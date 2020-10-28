@@ -14,6 +14,7 @@
         <module>../technology-learning-http-client</module>
         <module>../technology-learning-socket</module>
         <module>../technology-learning-socket-jsp</module>
+        <module>../technology-learning-spring-event</module>
     </modules>
 
     <parent>
