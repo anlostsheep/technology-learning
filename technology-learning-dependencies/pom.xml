@@ -7,14 +7,12 @@
         <module>../technology-learning-binary-tree</module>
         <module>../technology-learning-async-upload</module>
         <module>../technology-learning-mybatis</module>
-        <module>../technoloty-learning-synchronized</module>
         <module>../technology-learning-multiple-thread</module>
         <module>../technology-learning-java8</module>
-        <module>../technology-learning-hutool</module>
         <module>../technology-learning-http-client</module>
         <module>../technology-learning-socket</module>
-        <module>../technology-learning-socket-jsp</module>
         <module>../technology-learning-spring-event</module>
+        <module>../technology-learning-alibaba-coding-standard</module>
     </modules>
 
     <parent>

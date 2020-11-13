@@ -7,6 +7,7 @@ import com.lostsheep.technology.learning.async.upload.domain.FileInfo;
 import com.lostsheep.technology.learning.async.upload.domain.FileUploadInfo;
 import com.lostsheep.technology.learning.async.upload.service.AsyncUploadService;
 import com.lostsheep.technology.learning.async.upload.service.BaseService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.http.ResponseEntity;
@@ -36,16 +37,11 @@ import java.util.concurrent.Callable;
 @RestController
 @Slf4j
 @RequestMapping("/resources")
+@RequiredArgsConstructor
 public class ResourcesController {
 
-    private final AsyncUploadService asyncUploadService;
-    private final BaseService<BaseRequest, BaseResponse> baseService;
-
-    public ResourcesController(AsyncUploadService asyncUploadService,
-                               BaseService<BaseRequest, BaseResponse> baseService) {
-        this.asyncUploadService = asyncUploadService;
-        this.baseService = baseService;
-    }
+    final AsyncUploadService asyncUploadService;
+    final BaseService<BaseRequest, BaseResponse> baseService;
 
     @GetMapping("/call")
     public Callable<ResponseEntity<String>> uploadFile1() {
@@ -161,7 +157,7 @@ public class ResourcesController {
                                         .append(optFileName)
                                         .append("]已存在, 请勿重复上传;");
                             });
-                    
+
                     Optional.of(singleFile)
                             .filter(f -> !f.exists())
                             .ifPresent(f -> {
@@ -177,7 +173,6 @@ public class ResourcesController {
                                     fileInfoBuilder.append("文件[")
                                             .append(optFileName)
                                             .append("]存储失败;");
-
                                 }
                             });
 
