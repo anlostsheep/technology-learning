@@ -61,7 +61,7 @@ public class BaseServiceImpl implements BaseService<BaseRequest, BaseResponse> {
 
         CompletableFuture<BaseResponse> future = CompletableFuture.supplyAsync(supplier, executor)
                 .exceptionally(throwable -> {
-                    log.error("请求处理异常");
+                    log.error("请求处理异常", throwable);
                     return buildError();
                 });
 
@@ -80,7 +80,7 @@ public class BaseServiceImpl implements BaseService<BaseRequest, BaseResponse> {
         baseResponse.setMessage("request process error");
         baseResponse.setResponseTime(LocalDateTime.now());
         return baseResponse;
-                
+
     }
 
     private BaseResponse buildTimeout() {
