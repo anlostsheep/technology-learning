@@ -4,6 +4,7 @@ import com.lostsheep.technology.learning.alibaba.coding.standard.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +26,7 @@ public class Charter1 {
         list.add(new Pair<>("version", 20.00D));
         list.add(new Pair<>("version", 30.00D));
 
-        list.stream()
+        Map<String, Double> collect = list.stream()
                 .collect(Collectors.toMap(Pair::getKey, Pair::getValue, (v1, v2) -> v2));
 
         Charter2 charter2 = new Charter2();

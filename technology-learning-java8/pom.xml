@@ -12,7 +12,7 @@
 
     <artifactId>technology-learning-java8</artifactId>
 
-    
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
