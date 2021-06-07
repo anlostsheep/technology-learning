@@ -13,6 +13,7 @@
         <module>../technology-learning-socket</module>
         <module>../technology-learning-spring-event</module>
         <module>../technology-learning-alibaba-coding-standard</module>
+        <module>../technology-learning-selenium</module>
     </modules>
 
     <parent>
@@ -37,10 +38,14 @@
         <druid.version>1.1.10</druid.version>
         <guava.version>29.0-jre</guava.version>
         <hutool.version>5.4.7</hutool.version>
+        <selenium.version>3.141.59</selenium.version>
+        <lombok.version>1.18.12</lombok.version>
+        <okhttp.version>4.9.0</okhttp.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
@@ -80,6 +85,26 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
