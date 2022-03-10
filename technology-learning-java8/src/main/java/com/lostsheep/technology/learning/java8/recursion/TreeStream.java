@@ -1,7 +1,6 @@
 package com.lostsheep.technology.learning.java8.recursion;
 
 import com.alibaba.fastjson.JSON;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
  * @author dengzhen
  * @since technology-learning-alibaba-coding-standard
  */
-@Slf4j
 public class TreeStream {
 
     public static void main(String[] args) {
