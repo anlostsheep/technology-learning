@@ -72,7 +72,17 @@ public class BaseServiceImpl implements BaseService<BaseRequest, BaseResponse> {
 
     @Override
     public void processService(BaseRequest request, Consumer<BaseRequest> consumer) {
-        CompletableFuture.runAsync(() -> consumer.accept(request), executor);
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> consumer.accept(request), executor)
+                .exceptionally(throwable -> {
+                    log.error("请求处理异常", throwable);
+                    return null;
+                });
+
+        CompletableFuture.runAsync(() -> consumer.accept(request))
+                .exceptionally(throwable -> {
+                    log.error("处理异常, 异常线程类:{}", Thread.currentThread().getName(), throwable);
+                    return null;
+                });
     }
 
     private BaseResponse buildError() {
