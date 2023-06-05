@@ -28,7 +28,7 @@ public class CacheUpdateListener implements ApplicationListener<Cache> {
         log.info("缓存更新事件听到并执行...");
 
         COUNTER.put(event.getKey(), event.getValue());
-        
-        log.info("更新后 counter:{}", COUNTER.toString());   
+
+        log.info("更新后 counter:{}", COUNTER.toString());
     }
 }
