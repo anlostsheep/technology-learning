@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <b><code>OkhttpTest</code></b>
@@ -55,6 +56,50 @@ public class OkhttpTest {
         Request request = new Request.Builder()
                 .url(url)
                 .post(formBody)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            String string = response.body().string();
+            log.info("{}", string);
+        } catch (IOException e) {
+            log.error("", e);
+        }
+    }
+
+    @Test
+    public void testPost2() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                // 连接超时时间(socket 连接)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                // 读取超时时间
+                .readTimeout(10, TimeUnit.SECONDS)
+                // 写入超时时间
+                .writeTimeout(10, TimeUnit.SECONDS)
+                // 重试
+                .retryOnConnectionFailure(true)
+                .build();
+        RequestBody formBody = new FormBody.Builder()
+                .add("username", "LH141310001")
+                .add("password", "141310")
+                .add("checkText", "7rc7")
+                .add("checkCode", "7RC7")
+                .add("token", "")
+                .add("sms", "")
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://b2b.chinalh.com/login.do")
+                .post(formBody)
+                .addHeader("Host", "b2b.chinalh.com")
+                .addHeader("Connection", "keep-alive")
+                .addHeader("Cache-Control", "max-age=0")
+                .addHeader("Origin", "https://b2b.chinalh.com")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36")
+                .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
+                .addHeader("Referer", "https://b2b.chinalh.com/login/")
+                .addHeader("Accept-Language", "zh-CN,zh;q=0.9")
+                .addHeader("Cookie", "JSESSIONID=D8CF742BC273618B44E07A8942923D31")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
