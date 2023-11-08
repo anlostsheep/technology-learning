@@ -39,11 +39,12 @@
         <druid.version>1.1.10</druid.version>
         <guava.version>29.0-jre</guava.version>
         <hutool.version>5.4.7</hutool.version>
-        <selenium.version>3.141.59</selenium.version>
+        <selenium.version>4.0.0</selenium.version>
         <lombok.version>1.18.12</lombok.version>
         <okhttp.version>4.9.0</okhttp.version>
         <project.java8.version>1.0.0-SNAPSHOT</project.java8.version>
         <sl4j-api.version>1.7.36</sl4j-api.version>
+        <apache.common.io.version>2.11.0</apache.common.io.version>
     </properties>
 
     <dependencyManagement>
@@ -118,6 +119,12 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${sl4j-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${apache.common.io.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

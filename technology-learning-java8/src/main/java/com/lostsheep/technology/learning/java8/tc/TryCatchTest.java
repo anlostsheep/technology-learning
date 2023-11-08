@@ -56,7 +56,7 @@ public class TryCatchTest {
 
     public static void exitCatchExec() {
         try {
-
+            // throw new RuntimeException("exception throw");
         } catch (Exception e) {
             System.exit(0);
         } finally {

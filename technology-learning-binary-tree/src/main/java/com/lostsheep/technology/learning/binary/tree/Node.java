@@ -27,10 +27,10 @@ public class Node {
     private Node right;
 
     public static void main(String[] args) {
-        String str = "abc";
+        String str = "abcdefghijkabc";
         char[] chars = str.toCharArray();
 
-        Map<Character, Integer> map = new HashMap<>();
+        Map<Character, Integer> map = new HashMap<>(16);
         for (char c : chars) {
             if (map.containsKey(c)) {
                 Integer count = map.get(c);

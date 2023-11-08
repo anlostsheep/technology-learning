@@ -1,10 +1,7 @@
 package com.lostsheep.technology.learning.async.upload.controller;
 
 import com.google.common.collect.Lists;
-import com.lostsheep.technology.learning.async.upload.domain.BaseRequest;
-import com.lostsheep.technology.learning.async.upload.domain.BaseResponse;
-import com.lostsheep.technology.learning.async.upload.domain.FileInfo;
-import com.lostsheep.technology.learning.async.upload.domain.FileUploadInfo;
+import com.lostsheep.technology.learning.async.upload.domain.*;
 import com.lostsheep.technology.learning.async.upload.service.AsyncUploadService;
 import com.lostsheep.technology.learning.async.upload.service.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +49,18 @@ public class ResourcesController {
             return ResponseEntity.ok("request success");
         };
 
+    }
+
+    @GetMapping("/info")
+    public ApiVO<?> getApiInfo(String id, String name, Integer age) {
+        BaseResponse response = new BaseResponse();
+        response.setMessage(id + name + age);
+        return ApiVO.success(response);
+    }
+
+    @PostMapping("/info")
+    public ApiVO<?> postApiInfo(@RequestBody FileInfo info, @RequestBody FileInfo fileInfo1) {
+        return ApiVO.failed("失败", null);
     }
 
     @PostMapping("/files")
