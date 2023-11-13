@@ -1,11 +1,17 @@
 package com.lostsheep.technology.learning.async.upload;
 
-import org.apache.coyote.http11.AbstractHttp11Protocol;
-import org.springframework.boot.SpringApplication;
+import com.lostsheep.technology.learning.async.upload.config.SpringContextUtils;
+import com.lostsheep.technology.learning.async.upload.pipe.Pipeline;
+import com.lostsheep.technology.learning.async.upload.pipe.PipelineWrapper;
+import com.lostsheep.technology.learning.async.upload.processor.Processor;
+import com.lostsheep.technology.learning.async.upload.processor.ProcessorWrapper;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import java.util.List;
 
 /**
  * <b><code>AsyncUploadApplication</code></b>
@@ -22,18 +28,19 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class AsyncUploadApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AsyncUploadApplication.class, args);
-    }
+        ApplicationContext context = new SpringApplicationBuilder()
+                .sources(AsyncUploadApplication.class)
+                // 指定非 web 模式
+                .web(WebApplicationType.NONE)
+                .run(args);
+        SpringContextUtils.setApplicationContext(context);
 
-    @Bean
-    public TomcatServletWebServerFactory tomcatEmbedded() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-        tomcat.addConnectorCustomizers(connector -> {
-            if ((connector.getProtocolHandler() instanceof AbstractHttp11Protocol<?>)) {
-                //-1 means unlimited
-                ((AbstractHttp11Protocol<?>) connector.getProtocolHandler()).setMaxSwallowSize(-1);
-            }   
-        });
-        return tomcat;
+        ProcessorWrapper processor = (ProcessorWrapper) SpringContextUtils.getBean("processor");
+        List<Processor> subProcessors = processor.getSubProcessors();
+        subProcessors.forEach(Processor::process);
+
+        PipelineWrapper pipeline = (PipelineWrapper) SpringContextUtils.getBean("pipeline");
+        List<Pipeline> pipelines = pipeline.getPipelines();
+        pipelines.forEach(Pipeline::send2TargetSource);
     }
 }

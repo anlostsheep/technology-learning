@@ -1,6 +1,8 @@
 server:
   port: 8080
 
+zk.port:
+
 
 spring:
   servlet:
@@ -15,3 +17,9 @@ spring:
 logging:
   level:
     com.lostsheep.technology.learning.async.upload: debug
+
+processor.namespace: com.lostsheep.technology.learning.async.upload.processor.DyProcessor,\
+  com.lostsheep.technology.learning.async.upload.processor.TaobaoProcessor,\
+  com.lostsheep.technology.learning.async.upload.processor.JDProcessor
+
+pipeline.namespace: com.lostsheep.technology.learning.async.upload.pipe.HBasePipeline
